@@ -1,0 +1,3 @@
+/Users/zakerden1234/Desktop/PPHW-Task3/HomeWork3/cmake-build-debug/CMakeFiles/HomeWork3.dir
+/Users/zakerden1234/Desktop/PPHW-Task3/HomeWork3/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/zakerden1234/Desktop/PPHW-Task3/HomeWork3/cmake-build-debug/CMakeFiles/rebuild_cache.dir
