@@ -2,40 +2,41 @@
 #include <dlfcn.h>
 
 int main() {
-    void* encryptionLib = dlopen("/Users/zakerden1234/Desktop/PPHW-Task3/HomeWork3/encryption.dylib", RTLD_LAZY);
-
-    if (!encryptionLib) {
-        std::cerr << "Failed to load the encryption library." << std::endl;
-        return 1;
-    }
-
-    void (*encrypt)() = (void (*)())dlsym(encryptionLib, "encrypt");
-    void (*decrypt)() = (void (*)())dlsym(encryptionLib, "decrypt");
-
-    if (!encrypt || !decrypt) {
-        std::cerr << "Failed to get function pointers." << std::endl;
-        return 1;
-    }
-
-    char choice;
-
     while (true) {
-        std::cout << "Encrypt (e) or decrypt (d) [q to quit]? ";
-        std::cin >> choice;
-        std::cin.ignore();
+        void* library = dlopen("/Users/zakerden1234/Desktop/PPHW-Task3/HomeWork3/encryption.dylib", RTLD_LAZY);
 
-        if (choice == 'q') {
-            break;
-        } else if (choice == 'e') {
+        if (!library) {
+            std::cerr << "Failed to load the library: " << dlerror() << std::endl;
+            return 1;
+        }
+
+        typedef void (*EncryptFunction)();
+        typedef void (*DecryptFunction)();
+
+        EncryptFunction encrypt = (EncryptFunction)dlsym(library, "encrypt");
+        DecryptFunction decrypt = (DecryptFunction)dlsym(library, "decrypt");
+
+        if (!encrypt || !decrypt) {
+            std::cerr << "Failed to load functions: " << dlerror() << std::endl;
+            return 1;
+        }
+
+        std::cout << "Choose an operation:" << std::endl;
+        std::cout << "1. Encrypt" << std::endl;
+        std::cout << "2. Decrypt" << std::endl;
+        int choice;
+        std::cin >> choice;
+
+        if (choice == 1) {
             encrypt();
-        } else if (choice == 'd') {
+        } else if (choice == 2) {
             decrypt();
         } else {
-            std::cerr << "Invalid choice. Use 'e' for encryption, 'd' for decryption, or 'q' to quit." << std::endl;
+            std::cout << "Invalid choice." << std::endl;
         }
-    }
 
-    dlclose(encryptionLib);
+        dlclose(library);
+    }
 
     return 0;
 }
